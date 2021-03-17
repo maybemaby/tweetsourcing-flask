@@ -1,6 +1,21 @@
 {% extends "base.html" %}
 
+{% block banner %}
+<header class="banner">
+    <h1 class="banner">TweetSourcing</h1>
+    <h2 class="banner" id="subheader">Read | Check | Evaluate</h2>
+</header>
+{% endblock banner %}
+
 {% block content %}
-    <h1>TweetSourcing</h1>
-    <h2>Read | Check | Evaluate</h2>
+    <form class="form" action="" method="post" novalidate>
+        {{ form.hidden_tag() }}
+        <label for="tweet_url"></label>
+        <input type="text" name="tweet_url" id="tweet_url"><br>
+        <button type="submit" name="submit" id="submit">Search for sources</button>
+    </form>
+    <br>
+    {% if tweet_status %}
+        Tweet text: {{ tweet_status }}
+    {% endif %}
 {% endblock content %}
