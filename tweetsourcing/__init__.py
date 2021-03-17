@@ -8,7 +8,7 @@ def create_app(config_class=Config):
     app = Flask(__name__, instance_relative_config=True)
     app.config.from_object(config_class)
 
-    from tweetsourcing.main import bp as main_bp
+    from tweetsourcing.main.routes import bp as main_bp
     app.register_blueprint(main_bp)
 
     try:
