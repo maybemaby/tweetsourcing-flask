@@ -1,6 +1,7 @@
 from flask import Blueprint, render_template, request, url_for, flash
 from tweetsourcing.search import tweethandler
 from tweetsourcing.main.forms import TweetForm
+from tweetsourcing import twitter_api
 
 bp = Blueprint("main", __name__, url_prefix="/")
 
@@ -11,7 +12,7 @@ def home():
     if request.method == "POST":
         tweet_url = form.tweet_url.data
         tweet_status = tweethandler.retrieve_tweet(
-            tweethandler.create_api(), tweet_url=tweet_url
+            twitter_api, tweet_url=tweet_url
         )
         tweet_images = tweethandler.pull_images(tweet_status)
         return render_template(
