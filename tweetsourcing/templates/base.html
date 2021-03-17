@@ -1,0 +1,23 @@
+<html lang="en">
+<head>
+    <title>
+    {% block title %}
+        {% if title %}
+            {{ title }}
+        {% else %}
+            TweetSourcing
+        {% endif %}
+    {% endblock title %}
+    </title>
+    <meta name="description" content="TweetSourcing">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+{% block banner %}
+    
+{% endblock banner %}
+
+{% block content %}
+
+{% endblock content %}
+</html>
