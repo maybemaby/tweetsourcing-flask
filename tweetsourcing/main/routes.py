@@ -11,14 +11,14 @@ def home():
     form = TweetForm()
     if request.method == "POST":
         tweet_url = form.tweet_url.data
-        tweet_status = tweethandler.retrieve_tweet(
+        tweet_status = tweethandler.retrieve_embedded_tweet(
             twitter_api, tweet_url=tweet_url
         )
-        tweet_images = tweethandler.pull_images(tweet_status)
+        tweet_images = tweethandler.pull_images(api_object=twitter_api, tweet_url=tweet_url)
         return render_template(
             "home.html",
             title="TweetSourcing",
-            tweet_status=tweet_status.full_text,
+            tweet_status=tweet_status,
             tweet_images=tweet_images,
             form=form,
         )

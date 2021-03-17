@@ -15,7 +15,9 @@
         <button type="submit" name="submit" id="submit">Search for sources</button>
     </form>
     <br>
-    {% if tweet_status %}
-        Tweet text: {{ tweet_status }}
+    {# The embedded tweet doesn't work well with firefox tracking protection #}
+    {% if tweet_status %}  
+        {{ tweet_status|safe }}
     {% endif %}
+    
 {% endblock content %}

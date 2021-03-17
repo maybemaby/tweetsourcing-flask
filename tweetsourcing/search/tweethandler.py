@@ -37,12 +37,12 @@ def retrieve_embedded_tweet(api_object: tweepy.API, tweet_url: str):
     :rtype: HTML
     """
     try:
-        tweet = api_object.get_oembed(url=tweet_url, hide_thread=True, align='center')
+        tweet = api_object.get_oembed(url=tweet_url, hide_thread='true', align='center', dnt='true')
     except Exception as e:
         print(f'Error occured, message: {e}; URL attempted to retrieve: {tweet_url}')
-    return tweet.html
+    return tweet['html']
 
-def pull_images(status_object):
+def pull_images(status_object=None, **kwargs):
     """Used to pull image urls from the tweet if any exists
 
     :param status_object: Status object pulled from a tweet url with retrieve_tweet
@@ -50,6 +50,8 @@ def pull_images(status_object):
     :return: Iterable container of unique image urls.
     :rtype: Set
     """
+    if status_object is None and ("api_object" in kwargs and "tweet_url" in kwargs):
+        status_object = retrieve_tweet(kwargs["api_object"], kwargs["tweet_url"])
     try:
         tweet_images = status_object.entities["media"]
         image_url = set()
