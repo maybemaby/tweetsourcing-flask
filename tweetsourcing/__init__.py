@@ -1,6 +1,6 @@
 import os
 
-from flask import Flask, config
+from flask import Flask, current_app
 from config import Config
 
 
@@ -15,3 +15,5 @@ def create_app(config_class=Config):
         os.makedirs(app.instance_path)
     except OSError:
         pass
+    
+    return app
