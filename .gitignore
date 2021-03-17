@@ -1,0 +1,10 @@
+app.db
+venv
+.pytest_cache
+__pycache__
+.env
+.flaskenv
+.idea
+.vscode
+*.docx
+*.pdf
