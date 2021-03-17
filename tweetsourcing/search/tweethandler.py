@@ -1,7 +1,8 @@
 import os
 import tweepy, requests
 
-
+# Currently using twitter_api variable under tweetsourcing instead of this.
+# Not sure which method is better.
 def create_api() -> tweepy.API:
     """Creates api object from tweepy using api auth credentials."""
     auth = tweepy.OAuthHandler(
@@ -12,7 +13,6 @@ def create_api() -> tweepy.API:
         os.environ.get("TWITTER_ACCESS_TOKEN_SECRET"),
     )
     return tweepy.API(auth)
-
 
 def retrieve_tweet(api_object: tweepy.API, tweet_url: str) -> tweepy.Status:
     """Used to get a tweet object from authorized api object.
@@ -25,6 +25,22 @@ def retrieve_tweet(api_object: tweepy.API, tweet_url: str) -> tweepy.Status:
     """
     tweet_id = tweet_url.split("/status/")[1]
     return api_object.get_status(tweet_id, tweet_mode="extended")
+
+def retrieve_embedded_tweet(api_object: tweepy.API, tweet_url: str):
+    """Used to get the html for an embedded tweet.
+
+    :param api_object: Tweepy api object that is used for the retrieval method
+    :type api_object: tweepy.API
+    :param tweet_url: URL of desired tweet to embed
+    :type tweet_url: str
+    :return: oembed HTML
+    :rtype: HTML
+    """
+    try:
+        tweet = api_object.get_oembed(url=tweet_url, hide_thread=True, align='center')
+    except Exception as e:
+        print(f'Error occured, message: {e}; URL attempted to retrieve: {tweet_url}')
+    return tweet.html
 
 def pull_images(status_object):
     """Used to pull image urls from the tweet if any exists
