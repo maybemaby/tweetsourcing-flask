@@ -57,6 +57,8 @@ def pull_images(status_object=None, **kwargs):
         image_url = set()
     except KeyError:
         return None
+    except AttributeError:
+        return None
     for image in tweet_images:
         image_url.add(image["media_url"])
     return image_url

@@ -24,6 +24,12 @@ def client(app):
 def runner(app):
     return app.test_cli_runner()
 
+
 @pytest.fixture
 def twitter_api(app):
     return tweetsourcing.search.tweethandler.create_api()
+
+@pytest.fixture
+def tweet_status(twitter_api):
+    return tweetsourcing.search.tweethandler.retrieve_tweet(twitter_api, 'https://twitter.com/ThePSF/status/1366859617578455041')
+    
