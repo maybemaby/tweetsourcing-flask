@@ -16,8 +16,10 @@
     </form>
     <br>
     {# The embedded tweet doesn't work well with firefox tracking protection #}
-    {% if tweet_status %}  
-        {{ tweet_status|safe }}
+    {% if tweet_embed %}  
+        {{ tweet_embed|safe }}
     {% endif %}
-    
+    {% if query %}
+        Your generated query: "{{ query }}"
+    {% endif %}
 {% endblock content %}

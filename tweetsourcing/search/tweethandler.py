@@ -14,6 +14,7 @@ def create_api() -> tweepy.API:
     )
     return tweepy.API(auth)
 
+
 def retrieve_tweet(api_object: tweepy.API, tweet_url: str) -> tweepy.Status:
     """Used to get a tweet object from authorized api object.
 
@@ -26,21 +27,31 @@ def retrieve_tweet(api_object: tweepy.API, tweet_url: str) -> tweepy.Status:
     tweet_id = tweet_url.split("/status/")[1]
     return api_object.get_status(tweet_id, tweet_mode="extended")
 
-def retrieve_embedded_tweet(api_object: tweepy.API, tweet_url: str):
+
+def retrieve_embedded_tweet(
+    api_object: tweepy.API, tweet_url: str, include_obj: bool = False
+):
     """Used to get the html for an embedded tweet.
 
     :param api_object: Tweepy api object that is used for the retrieval method
     :type api_object: tweepy.API
     :param tweet_url: URL of desired tweet to embed
     :type tweet_url: str
-    :return: oembed HTML
-    :rtype: HTML
+    :param include_obj: True to include tweepy.Status obj in return value
+    :type include_obj: boolean
+    :return: oembed HTML or (oembed HTML, tweepy.Status)
+    :rtype: str, tweepy.Status
     """
     try:
-        tweet = api_object.get_oembed(url=tweet_url, hide_thread='true', align='center', dnt='true')
+        tweet = api_object.get_oembed(
+            url=tweet_url, hide_thread="true", align="center", dnt="true"
+        )
     except Exception as e:
-        print(f'Error occured, message: {e}; URL attempted to retrieve: {tweet_url}')
-    return tweet['html']
+        print(f"Error occured, message: {e}; URL attempted to retrieve: {tweet_url}")
+    if include_obj:
+        return (tweet['html'], retrieve_tweet(api_object, tweet_url))
+    return tweet["html"]
+
 
 def pull_images(status_object=None, **kwargs):
     """Used to pull image urls from the tweet if any exists
