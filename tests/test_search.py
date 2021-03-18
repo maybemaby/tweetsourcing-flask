@@ -1,7 +1,6 @@
 from tests.conftest import tweet_status, twitter_api
 from tweetsourcing.search.tweethandler import create_api, pull_images, retrieve_tweet, retrieve_embedded_tweet
 import pytest
-import tweetsourcing.search
 import tweepy
 
 
