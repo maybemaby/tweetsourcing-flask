@@ -15,7 +15,7 @@ def home():
             twitter_api, tweet_url=tweet_url, include_obj=True
         )
         tweet_images = tweethandler.pull_images(api_object=twitter_api, tweet_url=tweet_url)
-        query = parse.query_from_parse(tweet_status)
+        query = parse.query_from_parse(tweet_status.full_text)
         return render_template(
             "home.html",
             title="TweetSourcing",
