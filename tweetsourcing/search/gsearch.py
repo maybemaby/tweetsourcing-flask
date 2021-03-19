@@ -5,7 +5,7 @@ from rake_nltk import Rake
 from googleapiclient.discovery import build
 import dotenv
 
-def kword_search(query, startnum):
+def kword_search(query:str, startnum:int):
     """Performs google customsearch.
 
     Inputs
@@ -25,7 +25,7 @@ def kword_search(query, startnum):
     return res
 
 
-def categorize_news(results_object, tweet_kwords, *args):
+def categorize_news(results_object: dict, tweet_kwords: list, *args):
     """Categorizes search results with most matches
     based on the news source they came from.
 
@@ -97,7 +97,7 @@ def extract_articles(url_list):
         yield article_kwords
 
 
-def keyword_compare(kwords1, kwords2):
+def keyword_compare(kwords1:list, kwords2:list):
     """Counts matches of keywords in kwords1 to
     keywords in kwords2.
 

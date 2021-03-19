@@ -1,13 +1,15 @@
-import tweetsourcing.search.parse as parse
+from typing import Generator
+import tweetsourcing.search.gsearch as gsearch
+import pytest
+import tweepy
 from tests.conftest import tweet_status, twitter_api
+import tweetsourcing.search.parse as parse
 from tweetsourcing.search.tweethandler import (
     create_api,
     pull_images,
     retrieve_tweet,
     retrieve_embedded_tweet,
 )
-import pytest
-import tweepy
 
 
 class TestTweetHandler:
@@ -84,3 +86,54 @@ class TestParse:
             "Which words from this tweet will be the extracted words?"
         )
         assert query == "extracted words OR words OR tweet"
+
+
+class TestGSearch:
+    """Test gsearch module of tweetsourcing.search"""
+
+    def test_kword_search(self):
+        # Test the success of connecting to google custom search api
+        # and returning a results object
+        res = gsearch.kword_search("extracted words OR words OR tweet", 1)
+        assert type(res) is dict
+        assert bool(res["items"])
+        assert bool(res["queries"]["nextPage"][0]["startIndex"])
+
+    def test_categorize_news(self):
+        # Test the categorizing a dict into a different news
+        # dict based on matches and domain
+        tweet_kwords = ["python", "programming", "language"]
+        results = {
+            "items": [
+                {
+                    "link": "https://apnews.com/article/florida-python-sniffing-dogs-success-946cadff4d27bdcefb44f1259de6493a",
+                    "displayLink": "apnews.com",
+                    "title": "Florida's new python-sniffing dogs have 1st success",
+                },
+                {
+                    "link": "https://www.latimes.com/visuals/graphics/la-g-kobe-how-we-did-it-20160419-snap-htmlstory.html",
+                    "displayLink": "latimes.com",
+                    "title": "How we mapped Kobe's 30,699 shots - Los Angeles Times"
+                }
+            ],
+            "queries": {"nextPage": [{"startIndex": 11}]},
+        }
+        news = gsearch.categorize_news(results, tweet_kwords)
+        assert news["apnews.com"]["title"] == "Florida's new python-sniffing dogs have 1st success"
+        assert news["apnews.com"]["link"] == "https://apnews.com/article/florida-python-sniffing-dogs-success-946cadff4d27bdcefb44f1259de6493a"
+        assert news["apnews.com"]["matches"] > 0
+        assert news["next_page"] == 11
+        del news['next_page']
+        for key, domain in news.items():
+            assert domain["title"] != "How we mapped Kobe's 30,699 shots - Los Angeles Times"
+    
+    def test_extract_articles(self):
+        # Test that newspaper3k package still works
+        article1 = "https://apnews.com/article/florida-python-sniffing-dogs-success-946cadff4d27bdcefb44f1259de6493a"
+        article2 = "https://www.latimes.com/visuals/graphics/la-g-kobe-how-we-did-it-20160419-snap-htmlstory.html"
+        kword_gen = gsearch.extract_articles([article1, article2])
+        assert bool(kword_gen)
+        assert next(kword_gen)
+        next(kword_gen)
+        with pytest.raises(StopIteration):
+            next(kword_gen)
