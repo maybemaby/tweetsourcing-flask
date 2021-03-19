@@ -1,3 +1,4 @@
+import tweetsourcing.search.parse as parse
 from tests.conftest import tweet_status, twitter_api
 from tweetsourcing.search.tweethandler import create_api, pull_images, retrieve_tweet, retrieve_embedded_tweet
 import pytest
@@ -39,4 +40,30 @@ class TestTweetHandler:
         # testing pull_images with a tweet with no image.
         images = pull_images(tweet_status)
         assert images is None
+        
+class TestParse:
+    """Test the parse module of tweetsourcing.search"""
+
+    def test_extract_kwords(self):
+        # Test successful keyword extractions
+        keywords = parse.extract_kwords('Which words from this tweet will be the extracted words?')
+        assert 'extracted words' in keywords
+        assert 'words' in keywords
+        assert 'tweet' in keywords
+        assert 'from' not in keywords and 'will' not in keywords
+
+    def test_create_query(self):
+        # Test query creating from list of keywords and filtering out words shorter than 3 letters
+        keyword_list = ['extracted words', 'words', 'tweet', 'be', 'to']
+        query = parse.create_query(keyword_list)
+        with pytest.raises(ValueError):
+            query.index('be')
+        with pytest.raises(ValueError):
+            query.index('to')
+        assert query == 'extracted words OR words OR tweet'
+
+    def test_query_from_parse(self):
+        # Test the helper function from parse
+        query = parse.query_from_parse('Which words from this tweet will be the extracted words?')
+        assert query == 'extracted words OR words OR tweet'
         
