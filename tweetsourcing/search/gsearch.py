@@ -114,3 +114,30 @@ def keyword_compare(kwords1:list, kwords2:list):
         match_list = [match for match in set(kwords2) if kword in match]
         matches += len(match_list)
     return matches / len(kwords2)
+
+    
+def search_helper(query:str, startnum:int=1,*args, **kwargs) -> dict:
+    """Ties the kword_search, categorize_news, and keyword_compare functions together
+    from this module.
+
+    :param query: Query string to google search
+    :type query: str
+    :param startnum: Page of google search results to start on, defaults to 1
+    :type startnum: int, optional
+    :return: nested dict of news domains with their highest matching articles
+    :rtype: dict
+    """
+    startnum = startnum
+    while int(startnum) <= 50:    
+        results = kword_search(query, startnum)
+        try:
+            news_dict = categorize_news(results, kwargs['tweet_kwords'], news_dict)
+        except:
+            news_dict = categorize_news(result, kwargs['tweet_kwords'])
+        for domain in news_dict.values():
+            if domain["title"] == "":
+                startnum = news_dict["next_page"]
+                break
+    news_dict.pop("next_page")
+    return news_dict
+    
