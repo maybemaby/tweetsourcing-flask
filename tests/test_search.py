@@ -113,20 +113,29 @@ class TestGSearch:
                 {
                     "link": "https://www.latimes.com/visuals/graphics/la-g-kobe-how-we-did-it-20160419-snap-htmlstory.html",
                     "displayLink": "latimes.com",
-                    "title": "How we mapped Kobe's 30,699 shots - Los Angeles Times"
-                }
+                    "title": "How we mapped Kobe's 30,699 shots - Los Angeles Times",
+                },
             ],
             "queries": {"nextPage": [{"startIndex": 11}]},
         }
         news = gsearch.categorize_news(results, tweet_kwords)
-        assert news["apnews.com"]["title"] == "Florida's new python-sniffing dogs have 1st success"
-        assert news["apnews.com"]["link"] == "https://apnews.com/article/florida-python-sniffing-dogs-success-946cadff4d27bdcefb44f1259de6493a"
+        assert (
+            news["apnews.com"]["title"]
+            == "Florida's new python-sniffing dogs have 1st success"
+        )
+        assert (
+            news["apnews.com"]["link"]
+            == "https://apnews.com/article/florida-python-sniffing-dogs-success-946cadff4d27bdcefb44f1259de6493a"
+        )
         assert news["apnews.com"]["matches"] > 0
         assert news["next_page"] == 11
-        del news['next_page']
+        del news["next_page"]
         for key, domain in news.items():
-            assert domain["title"] != "How we mapped Kobe's 30,699 shots - Los Angeles Times"
-    
+            assert (
+                domain["title"]
+                != "How we mapped Kobe's 30,699 shots - Los Angeles Times"
+            )
+
     def test_extract_articles(self):
         # Test that newspaper3k package still works
         article1 = "https://apnews.com/article/florida-python-sniffing-dogs-success-946cadff4d27bdcefb44f1259de6493a"
