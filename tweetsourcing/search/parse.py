@@ -1,3 +1,7 @@
+"""parse is the module for functions that parse information from tweets
+and do something directly with the parsed info.
+"""
+
 from rake_nltk import Rake
 
 

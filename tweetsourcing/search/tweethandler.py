@@ -1,3 +1,7 @@
+"""tweethandler contains the TweetHandler class that wraps around tweepy's
+API object. Functions as the main way to interact with tweets and twitter's
+api.
+"""
 import os
 import tweepy, requests
 
@@ -16,11 +20,13 @@ class TweetHandler(tweepy.API):
         self.secret_key = secret_key
         self.access_token = access_token
         self.access_token_secret = access_token_secret
+        self.tweet = None
+
         oauth_handler = tweepy.OAuthHandler(self.api_key, self.secret_key)
         if self.access_token and self.access_token_secret:
             oauth_handler.set_access_token(self.access_token, self.access_token_secret)
         self.auth = oauth_handler
-        self.tweet = None
+        
 
     def retrieve_tweet(self, tweet_url:str) -> tweepy.Status:
         """Used to get a Status object from a url string.
