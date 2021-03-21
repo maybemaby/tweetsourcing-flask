@@ -1,7 +1,7 @@
-from flask import Blueprint, render_template, request, url_for, flash
+from flask import Blueprint, render_template, request, url_for, flash, session
 from tweepy.models import ResultSet
 from tweetsourcing.search import tweethandler, parse, gsearch
-from tweetsourcing.main.forms import TweetForm
+from tweetsourcing.main.forms import TweetForm, SearchForm
 from tweetsourcing import twitter_api
 
 bp = Blueprint("main", __name__, url_prefix="/")
@@ -10,7 +10,8 @@ bp = Blueprint("main", __name__, url_prefix="/")
 @bp.route("", methods=("GET", "POST"))
 def home():
     form = TweetForm()
-    if request.method == "POST" and TweetForm.validate():
+    confirm_form = SearchForm()
+    if request.method == "POST" and form.submit():
         tweet_url = form.tweet_url.data
         tweet_embed, tweet_status = tweethandler.retrieve_embedded_tweet(
             twitter_api, tweet_url=tweet_url, include_obj=True
@@ -19,7 +20,7 @@ def home():
             api_object=twitter_api, tweet_url=tweet_url
         )
         query = parse.query_from_parse(tweet_status.full_text)
-        
+        session["query"] = query
         return render_template(
             "home.html",
             title="TweetSourcing",
@@ -27,6 +28,7 @@ def home():
             tweet_images=tweet_images,
             form=form,
             query=query,
+            confirm_form=confirm_form
         )
     else:
         return render_template(
@@ -38,7 +40,13 @@ def home():
             form=form,
         )
 
-@bp.route("/q?=<query>", methods=("GET"))
-def search(query):
-    matches = gsearch.search_helper(query)
-    render_template("results.html", title="TweetSourcing - Results", matches=matches.items())
+
+@bp.route("search", methods=["POST"])
+def search():
+    form = SearchForm()
+    query = form.query.data
+    kwords = query.split(" OR ")
+    matches = gsearch.search_helper(query, tweet_kwords=kwords)
+    return render_template(
+        "results.html", title="TweetSourcing - Results", matches=matches.values()
+    )

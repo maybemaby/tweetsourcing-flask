@@ -67,7 +67,10 @@ def categorize_news(results_object: dict, tweet_kwords: list, *args):
         ]
         article_kword_gen = extract_articles([article.link for article in article_results])
         for result in article_results:
-            kword_matches = keyword_compare(tweet_kwords, next(article_kword_gen))
+            try:
+                kword_matches = keyword_compare(tweet_kwords, next(article_kword_gen))
+            except TypeError:
+                pass
             if kword_matches > news[result.site]["matches"]:
                 news[result.site]["title"] = result.title
                 news[result.site]["link"] = result.link
@@ -94,7 +97,10 @@ def extract_articles(url_list):
         article.parse()
         r.extract_keywords_from_text(article.text)
         article_kwords = r.get_ranked_phrases()
-        yield article_kwords
+        if article_kwords:
+            yield article_kwords
+        else:
+            yield None
 
 
 def keyword_compare(kwords1:list, kwords2:list):
@@ -109,6 +115,8 @@ def keyword_compare(kwords1:list, kwords2:list):
     -------
     float matches: number of times keyword in kwords1 shows up in kwords2.
     """
+    if type(kwords2) != list or len(kwords2) == 0:
+        raise TypeError(f'keyword_compare only takes an iterable list of words, {repr(kwords2)} is not compatible')
     matches = 0
     for kword in set(kwords1):
         match_list = [match for match in set(kwords2) if kword in match]
@@ -133,7 +141,7 @@ def search_helper(query:str, startnum:int=1,*args, **kwargs) -> dict:
         try:
             news_dict = categorize_news(results, kwargs['tweet_kwords'], news_dict)
         except:
-            news_dict = categorize_news(result, kwargs['tweet_kwords'])
+            news_dict = categorize_news(results, kwargs['tweet_kwords'])
         for domain in news_dict.values():
             if domain["title"] == "":
                 startnum = news_dict["next_page"]
