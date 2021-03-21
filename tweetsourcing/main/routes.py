@@ -1,5 +1,4 @@
 from flask import Blueprint, render_template, request, url_for, flash, session
-from tweepy.models import ResultSet
 from tweetsourcing.search import tweethandler, parse, gsearch
 from tweetsourcing.main.forms import TweetForm, SearchForm
 from tweetsourcing import twitter_api

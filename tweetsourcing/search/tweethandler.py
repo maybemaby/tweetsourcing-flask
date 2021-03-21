@@ -3,7 +3,7 @@ API object. Functions as the main way to interact with tweets and twitter's
 api.
 """
 import os
-import tweepy, requests
+import tweepy
 
 
 class TweetHandler(tweepy.API):
@@ -14,7 +14,10 @@ class TweetHandler(tweepy.API):
     :param access_token: Twitter access token
     :param access_token_secret: Twitter access token secret
     """
-    def __init__(self, api_key, secret_key, access_token=None, access_token_secret=None):
+
+    def __init__(
+        self, api_key, secret_key, access_token=None, access_token_secret=None
+    ):
         super().__init__(self)
         self.api_key = api_key
         self.secret_key = secret_key
@@ -26,9 +29,20 @@ class TweetHandler(tweepy.API):
         if self.access_token and self.access_token_secret:
             oauth_handler.set_access_token(self.access_token, self.access_token_secret)
         self.auth = oauth_handler
-        
 
-    def retrieve_tweet(self, tweet_url:str) -> tweepy.Status:
+    def __str__(self) -> str:
+        if self.tweet:
+            return f"Tweet: {self.tweet.full_text}"
+        else:
+            return f"Tweet: {self.tweet}"
+
+    def __bool__(self) -> bool:
+        if self.tweet:
+            return True
+        else:
+            return False
+
+    def retrieve_tweet(self, tweet_url: str) -> tweepy.Status:
         """Used to get a Status object from a url string.
 
         :param tweet_url: URL of desired tweet to analyze
@@ -39,7 +53,7 @@ class TweetHandler(tweepy.API):
         self.tweet = self.get_status(tweet_id, tweet_mode="extended")
         return self.tweet
 
-    def retrieve_embedded_tweet(self, tweet_url:str, include_obj:bool=False):
+    def retrieve_embedded_tweet(self, tweet_url: str, include_obj: bool = False):
         """Used to get the html for an embedded tweet.
 
         :param api_object: Tweepy api object that is used for the retrieval method
@@ -52,12 +66,15 @@ class TweetHandler(tweepy.API):
         :rtype: str, tweepy.Status
         """
         try:
-            tweet = self.get_oembed(url=tweet_url, hide_thread="true", align="center", dnt="true"
+            tweet = self.get_oembed(
+                url=tweet_url, hide_thread="true", align="center", dnt="true"
             )
         except Exception as e:
-            print(f"Error occured, message: {e}; URL attempted to retrieve: {tweet_url}")
+            print(
+                f"Error occured, message: {e}; URL attempted to retrieve: {tweet_url}"
+            )
         if include_obj:
-            return (tweet['html'], self.retrieve_tweet(tweet_url))
+            return (tweet["html"], self.retrieve_tweet(tweet_url))
         return tweet["html"]
 
     def pull_images(self, status_object=None, **kwargs):
@@ -67,9 +84,11 @@ class TweetHandler(tweepy.API):
         :type status_object: tweepy.Status
         :return: Iterable container of unique image urls.
         :rtype: Set
-        """    
+        """
         if status_object is None and ("api_object" in kwargs and "tweet_url" in kwargs):
-            status_object = self.retrieve_tweet(kwargs["api_object"], kwargs["tweet_url"])
+            status_object = self.retrieve_tweet(
+                kwargs["api_object"], kwargs["tweet_url"]
+            )
         try:
             tweet_images = status_object.entities["media"]
             image_urls = set()

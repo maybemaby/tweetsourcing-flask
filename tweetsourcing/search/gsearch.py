@@ -4,6 +4,8 @@ from newspaper import Article, news_pool
 from rake_nltk import Rake
 from googleapiclient.discovery import build
 
+# TODO: Put full titles in news
+
 def kword_search(query:str, startnum:int):
     """Performs google customsearch.
 
