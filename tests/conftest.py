@@ -1,7 +1,7 @@
 import os
 import pytest
 from tweetsourcing import create_app
-import tweetsourcing.search.tweethandler
+from tweetsourcing.search.tweethandler import TweetHandler
 
 
 @pytest.fixture
@@ -27,11 +27,12 @@ def runner(app):
 
 @pytest.fixture
 def twitter_api(app):
-    return tweetsourcing.search.tweethandler.create_api()
+    return TweetHandler(
+        api_key=os.environ.get("TWITTER_API_KEY"),
+        secret_key=os.environ.get("TWITTER_SECRET_KEY")
+    )
 
 
 @pytest.fixture
 def tweet_status(twitter_api):
-    return tweetsourcing.search.tweethandler.retrieve_tweet(
-        twitter_api, "https://twitter.com/ThePSF/status/1366859617578455041"
-    )
+    return TweetHandler.retrieve_tweet("https://twitter.com/ThePSF/status/1366859617578455041")

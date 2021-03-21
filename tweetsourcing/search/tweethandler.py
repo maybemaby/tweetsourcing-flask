@@ -1,75 +1,76 @@
 import os
 import tweepy, requests
 
-# Currently using twitter_api variable under tweetsourcing instead of this.
-# Not sure which method is better.
-def create_api() -> tweepy.API:
-    """Creates api object from tweepy using api auth credentials."""
-    auth = tweepy.OAuthHandler(
-        os.environ.get("TWITTER_API_KEY"), os.environ.get("TWITTER_SECRET_KEY")
-    )
-    auth.set_access_token(
-        os.environ.get("TWITTER_ACCESS_TOKEN"),
-        os.environ.get("TWITTER_ACCESS_TOKEN_SECRET"),
-    )
-    return tweepy.API(auth)
 
+class TweetHandler(tweepy.API):
+    """Wrapper for the tweepy.API object to tie together and add some functionality.
 
-def retrieve_tweet(api_object: tweepy.API, tweet_url: str) -> tweepy.Status:
-    """Used to get a tweet object from authorized api object.
-
-    :param api_object: Tweepy api object
-    :type api_object: tweepy.API
-    :param tweet_url: URL of desired tweet to analyze
-    :type tweet_url: str
-    :return: tweepy.Status
+    :param api_key: Twitter api key
+    :param secret_key: Twitter secret key
+    :param access_token: Twitter access token
+    :param access_token_secret: Twitter access token secret
     """
-    tweet_id = tweet_url.split("/status/")[1]
-    return api_object.get_status(tweet_id, tweet_mode="extended")
+    def __init__(self, api_key, secret_key, access_token=None, access_token_secret=None):
+        super().__init__(self)
+        self.api_key = api_key
+        self.secret_key = secret_key
+        self.access_token = access_token
+        self.access_token_secret = access_token_secret
+        oauth_handler = tweepy.OAuthHandler(self.api_key, self.secret_key)
+        if self.access_token and self.access_token_secret:
+            oauth_handler.set_access_token(self.access_token, self.access_token_secret)
+        self.auth = oauth_handler
+        self.tweet = None
 
+    def retrieve_tweet(self, tweet_url:str) -> tweepy.Status:
+        """Used to get a Status object from a url string.
 
-def retrieve_embedded_tweet(
-    api_object: tweepy.API, tweet_url: str, include_obj: bool = False
-):
-    """Used to get the html for an embedded tweet.
+        :param tweet_url: URL of desired tweet to analyze
+        :type tweet_url: str
+        :return: tweepy.Status
+        """
+        tweet_id = tweet_url.split("/status/")[1]
+        self.tweet = self.get_status(tweet_id, tweet_mode="extended")
+        return self.tweet
 
-    :param api_object: Tweepy api object that is used for the retrieval method
-    :type api_object: tweepy.API
-    :param tweet_url: URL of desired tweet to embed
-    :type tweet_url: str
-    :param include_obj: True to include tweepy.Status obj in return value
-    :type include_obj: boolean
-    :return: oembed HTML or (oembed HTML, tweepy.Status)
-    :rtype: str, tweepy.Status
-    """
-    try:
-        tweet = api_object.get_oembed(
-            url=tweet_url, hide_thread="true", align="center", dnt="true"
-        )
-    except Exception as e:
-        print(f"Error occured, message: {e}; URL attempted to retrieve: {tweet_url}")
-    if include_obj:
-        return (tweet['html'], retrieve_tweet(api_object, tweet_url))
-    return tweet["html"]
+    def retrieve_embedded_tweet(self, tweet_url:str, include_obj:bool=False):
+        """Used to get the html for an embedded tweet.
 
+        :param api_object: Tweepy api object that is used for the retrieval method
+        :type api_object: tweepy.API
+        :param tweet_url: URL of desired tweet to embed
+        :type tweet_url: str
+        :param include_obj: True to include tweepy.Status obj in return value
+        :type include_obj: boolean
+        :return: oembed HTML or (oembed HTML, tweepy.Status)
+        :rtype: str, tweepy.Status
+        """
+        try:
+            tweet = self.get_oembed(url=tweet_url, hide_thread="true", align="center", dnt="true"
+            )
+        except Exception as e:
+            print(f"Error occured, message: {e}; URL attempted to retrieve: {tweet_url}")
+        if include_obj:
+            return (tweet['html'], self.retrieve_tweet(tweet_url))
+        return tweet["html"]
 
-def pull_images(status_object=None, **kwargs):
-    """Used to pull image urls from the tweet if any exists
+    def pull_images(self, status_object=None, **kwargs):
+        """Used to pull image urls from the tweet if any exists
 
-    :param status_object: Status object pulled from a tweet url with retrieve_tweet
-    :type status_object: tweepy.Status
-    :return: Iterable container of unique image urls.
-    :rtype: Set
-    """
-    if status_object is None and ("api_object" in kwargs and "tweet_url" in kwargs):
-        status_object = retrieve_tweet(kwargs["api_object"], kwargs["tweet_url"])
-    try:
-        tweet_images = status_object.entities["media"]
-        image_url = set()
-    except KeyError:
-        return None
-    except AttributeError:
-        return None
-    for image in tweet_images:
-        image_url.add(image["media_url"])
-    return image_url
+        :param status_object: Status object pulled from a tweet url with retrieve_tweet
+        :type status_object: tweepy.Status
+        :return: Iterable container of unique image urls.
+        :rtype: Set
+        """    
+        if status_object is None and ("api_object" in kwargs and "tweet_url" in kwargs):
+            status_object = self.retrieve_tweet(kwargs["api_object"], kwargs["tweet_url"])
+        try:
+            tweet_images = status_object.entities["media"]
+            image_urls = set()
+        except KeyError:
+            return None
+        except AttributeError:
+            return None
+        for image in tweet_images:
+            image_urls.add(image["media_url"])
+        return image_urls

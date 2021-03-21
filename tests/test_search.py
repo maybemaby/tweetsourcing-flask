@@ -1,15 +1,11 @@
-from typing import Generator
+import os
 import tweetsourcing.search.gsearch as gsearch
 import pytest
 import tweepy
 from tests.conftest import tweet_status, twitter_api
 import tweetsourcing.search.parse as parse
-from tweetsourcing.search.tweethandler import (
-    create_api,
-    pull_images,
-    retrieve_tweet,
-    retrieve_embedded_tweet,
-)
+from tweetsourcing.search.tweethandler import TweetHandler
+
 # TODO: Create test for no items in result objects
 # TODO: Test for handling newspaper.article read taking too long
 
@@ -19,13 +15,24 @@ class TestTweetHandler:
 
     def test_api_creation(self):
         # Creates and asserts successful api object creation.
-        api_object = create_api()
-        assert type(api_object) is tweepy.API
+        api_object = TweetHandler(
+            api_key=os.environ.get("TWITTER_API_KEY"),
+            secret_key=os.environ.get("TWITTER_SECRET_KEY"),
+            access_token=os.environ.get("TWITTER_ACCESS_TOKEN"),
+            access_token_secret=os.environ.get("TWITTER_ACCESS_TOKEN_SECRET"),
+        )
+        assert type(api_object.me()) is tweepy.User
+
+    def test_api_fail(self):
+        # Tests for failure of api creation due to incorrect keys
+        api_object = TweetHandler(api_key="notthekey", secret_key="alsonotthekey")
+        with pytest.raises(tweepy.TweepError):
+            api_object.me() == None
 
     def test_retrieve_tweet(self, twitter_api):
         # tests retrieve_tweet function
-        tweet = retrieve_tweet(
-            twitter_api, "https://twitter.com/thepsf/status/1266007827061116929?lang=en"
+        tweet = twitter_api.retrieve_tweet(
+            "https://twitter.com/thepsf/status/1266007827061116929?lang=en"
         )
         assert type(tweet) is tweepy.Status
         assert (
@@ -35,8 +42,8 @@ class TestTweetHandler:
 
     def test_retrieve_embedded_tweet(self, twitter_api):
         # test retrieve_embedded_tweet function
-        tweet = retrieve_embedded_tweet(
-            twitter_api, "https://twitter.com/thepsf/status/1266007827061116929?lang=en"
+        tweet = twitter_api.retrieve_embedded_tweet(
+            "https://twitter.com/thepsf/status/1266007827061116929?lang=en"
         )
         assert bool(tweet)
         assert 'data-dnt="true"' in tweet
@@ -45,7 +52,7 @@ class TestTweetHandler:
 
     def test_pull_images_no_status(self, twitter_api):
         # test pull_images function wihout an included Status object
-        images = pull_images(
+        images = twitter_api.pull_images(
             api_object=twitter_api,
             tweet_url="https://twitter.com/thepsf/status/1266007827061116929?lang=en",
         )
@@ -55,7 +62,7 @@ class TestTweetHandler:
 
     def test_pull_images_no_pic(self, twitter_api):
         # testing pull_images with a tweet with no image.
-        images = pull_images(tweet_status)
+        images = twitter_api.pull_images(tweet_status)
         assert images is None
 
 

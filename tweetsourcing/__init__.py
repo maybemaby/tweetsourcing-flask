@@ -1,16 +1,14 @@
 import os
 
 from flask import Flask, current_app
-from tweepy import API as TwitterAPI
-from tweepy import AppAuthHandler
+from tweetsourcing.search.tweethandler import TweetHandler
 from config import Config
 
 
-auth = AppAuthHandler(
-    consumer_key=os.environ.get("TWITTER_API_KEY"),
-    consumer_secret=os.environ.get("TWITTER_SECRET_KEY"),
+twitter_api = TweetHandler(
+    api_key=os.environ.get("TWITTER_API_KEY"),
+    secret_key=os.environ.get("TWITTER_SECRET_KEY")
 )
-twitter_api = TwitterAPI(auth)
 
 
 def create_app(config_class=Config):

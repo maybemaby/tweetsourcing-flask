@@ -13,12 +13,10 @@ def home():
     confirm_form = SearchForm()
     if request.method == "POST" and form.submit():
         tweet_url = form.tweet_url.data
-        tweet_embed, tweet_status = tweethandler.retrieve_embedded_tweet(
-            twitter_api, tweet_url=tweet_url, include_obj=True
+        tweet_embed, tweet_status = twitter_api.retrieve_embedded_tweet(
+            tweet_url=tweet_url, include_obj=True
         )
-        tweet_images = tweethandler.pull_images(
-            api_object=twitter_api, tweet_url=tweet_url
-        )
+        tweet_images = twitter_api.pull_images(status_object=tweet_status)
         query = parse.query_from_parse(tweet_status.full_text)
         session["query"] = query
         return render_template(
