@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <h2>Here are the top matches for this tweet:</h2>
+    <ul>
+    {% for match in matches %}
+        {% if match['title'] %}
+        <li>
+            {{ match['title'] }}
+            <a href="{{ match['link'] }}" target="_blank" rel="noopener noreferrer">Go to source</a>
+        </li>
+        {% endif %}
+    {% endfor %}
+    </ul>
+{% endblock content %}
