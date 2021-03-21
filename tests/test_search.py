@@ -10,6 +10,8 @@ from tweetsourcing.search.tweethandler import (
     retrieve_tweet,
     retrieve_embedded_tweet,
 )
+# TODO: Create test for no items in result objects
+# TODO: Test for handling newspaper.article read taking too long
 
 
 class TestTweetHandler:

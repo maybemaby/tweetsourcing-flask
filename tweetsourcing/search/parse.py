@@ -24,4 +24,5 @@ def create_query(kword_list):
 
 def query_from_parse(tweet_text: str) -> str:
     """Helper function to tie together create_query and extract_kwords"""
-    return create_query(extract_kwords(tweet_text))
+    kwords = extract_kwords(tweet_text)
+    return create_query(kwords)

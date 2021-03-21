@@ -18,8 +18,10 @@ def create_app(config_class=Config):
     app.config.from_object(config_class)
 
     from tweetsourcing.main.routes import bp as main_bp
-
     app.register_blueprint(main_bp)
+
+    from tweetsourcing.errors import bp as errors_bp
+    app.register_blueprint(errors_bp)
 
     try:
         os.makedirs(app.instance_path)
