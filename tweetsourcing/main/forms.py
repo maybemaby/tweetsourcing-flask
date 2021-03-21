@@ -14,4 +14,5 @@ class TweetForm(FlaskForm):
 
 class SearchForm(FlaskForm):
     query = StringField(validators=[Length(max=141, message="Query too long")])
+    or_terms = StringField(validators=[Length(max=141, message="Additional terms too long")])
     submit = SubmitField('Confirm')

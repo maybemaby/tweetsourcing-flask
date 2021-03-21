@@ -23,7 +23,8 @@
         Your generated query:
         <form class="confirm_form" action="{{ url_for('main.search') }}" method="post", id="confirm_form" novalidate">
             {{ confirm_form.hidden_tag() }}
-        <input type="text" name="query" id="query" required="" value="{{ query }}">
+        <input type="text" name="query" id="query" required="" value="{{ query }}"><br>
+        <input type="text" name="or_terms" id="or_terms" required="" value="{{ or_terms }}"><br>
             Does this query look good?
             {{ confirm_form.submit() }}
         </form>

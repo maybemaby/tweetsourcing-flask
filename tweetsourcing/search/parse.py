@@ -19,10 +19,14 @@ def extract_kwords(tweet_text: str) -> list:
 
 
 def create_query(kword_list):
-    """Takes keyword list and joins them to be used in google search."""
+    """Takes keyword list and returns them as a main query and additional terms
+    used for the google custom search orTerms parameter."""
     # filter out possible unnecessary words
     kword_list = [word for word in kword_list if len(word) > 2]
-    query = " OR ".join(kword_list)
+    query = kword_list[0]
+    if len(kword_list) > 1:
+        or_terms = "|".join(kword_list[1:])
+        return query, or_terms
     return query
 
 

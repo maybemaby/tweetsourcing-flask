@@ -16,7 +16,7 @@ def home():
             tweet_url=tweet_url, include_obj=True
         )
         tweet_images = twitter_api.pull_images(status_object=tweet_status)
-        query = parse.query_from_parse(tweet_status.full_text)
+        query, or_terms = parse.query_from_parse(tweet_status.full_text)
         session["query"] = query
         return render_template(
             "home.html",
@@ -25,6 +25,7 @@ def home():
             tweet_images=tweet_images,
             form=form,
             query=query,
+            or_terms=or_terms,
             confirm_form=confirm_form
         )
     else:
@@ -42,8 +43,10 @@ def home():
 def search():
     form = SearchForm()
     query = form.query.data
-    kwords = query.split(" OR ")
-    matches = gsearch.search_helper(query, tweet_kwords=kwords)
+    or_terms = form.or_terms.data
+    kwords = or_terms.split("|")
+    kwords += query
+    matches = gsearch.search_helper(query, tweet_kwords=kwords, orTerms=or_terms)
     return render_template(
         "results.html", title="TweetSourcing - Results", matches=matches.values()
     )

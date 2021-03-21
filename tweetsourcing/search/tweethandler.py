@@ -87,7 +87,7 @@ class TweetHandler(tweepy.API):
         """
         if status_object is None and ("api_object" in kwargs and "tweet_url" in kwargs):
             status_object = self.retrieve_tweet(
-                kwargs["api_object"], kwargs["tweet_url"]
+            kwargs["tweet_url"]
             )
         try:
             tweet_images = status_object.entities["media"]

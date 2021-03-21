@@ -6,7 +6,7 @@ from googleapiclient.discovery import build
 
 # TODO: Put full titles in news
 
-def kword_search(query:str, startnum:int):
+def kword_search(query:str, startnum:int, orTerms:list=None):
     """Performs google customsearch.
 
     Inputs
@@ -18,11 +18,18 @@ def kword_search(query:str, startnum:int):
     google customsearch Results object.
     """
     service = build("customsearch", "v1", developerKey=os.environ.get("CSE_API_KEY"))
-    res = (
-        service.cse()
-        .list(q=query, cx=os.environ.get("CSE_ID"), lr="lang_en", start=startnum)
-        .execute()
+    if orTerms:
+        res = (
+            service.cse()
+            .list(q=query, cx=os.environ.get("CSE_ID"), lr="lang_en", orTerms=orTerms, start=startnum)
+            .execute()
     )
+    else:
+        res = (
+            service.cse()
+            .list(q=query, cx=os.environ.get("CSE_ID"), lr="lang_en", start=startnum)
+            .execute()
+        )
     return res
 
 
@@ -71,7 +78,7 @@ def categorize_news(results_object: dict, tweet_kwords: list, *args):
             try:
                 kword_matches = keyword_compare(tweet_kwords, next(article_kword_gen))
             except TypeError:
-                pass
+                continue
             if kword_matches > news[result.site]["matches"]:
                 news[result.site]["title"] = result.title
                 news[result.site]["link"] = result.link
@@ -137,8 +144,11 @@ def search_helper(query:str, startnum:int=1,*args, **kwargs) -> dict:
     :rtype: dict
     """
     startnum = startnum
-    while int(startnum) <= 50:    
-        results = kword_search(query, startnum)
+    while int(startnum) <= 50:
+        if kwargs['orTerms']:
+            results = kword_search(query,startnum, orTerms=kwargs['orTerms'])
+        else:
+            results = kword_search(query, startnum)
         try:
             news_dict = categorize_news(results, kwargs['tweet_kwords'], news_dict)
         except:
