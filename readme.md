@@ -1,0 +1,1 @@
+Modules used: google-cloud-vision, flask, flask-wtf, google-api-python-client, newspaper3k, pytest, rake-nltk
