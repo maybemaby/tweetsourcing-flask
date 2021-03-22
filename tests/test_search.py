@@ -1,11 +1,9 @@
 import os
-import tweetsourcing.search.gsearch as gsearch
 import pytest
 import tweepy
 from tests.conftest import tweet_status, twitter_api
-import tweetsourcing.search.parse as parse
 from tweetsourcing.search.tweethandler import TweetHandler
-
+from tweetsourcing.search import imagematch, parse, gsearch
 # TODO: Create test for no items in result objects
 # TODO: Test for handling newspaper.article read taking too long
 
@@ -132,7 +130,7 @@ class TestGSearch:
         news = gsearch.categorize_news(results, tweet_kwords)
         assert (
             news["apnews.com"]["title"]
-            == "Florida's new python-sniffing dogs have 1st success"
+            == "Florida’s new python-sniffing dogs have 1st success"
         )
         assert (
             news["apnews.com"]["link"]
@@ -157,3 +155,40 @@ class TestGSearch:
         next(kword_gen)
         with pytest.raises(StopIteration):
             next(kword_gen)
+
+class TestImageMatch:
+    """Test the image matching module"""
+    
+    def test_reverse_image_search(self):
+        # Test for successful image matching against a twitter
+        # img link with a generic image.
+        results = imagematch.reverse_image_search("https://pbs.twimg.com/media/EwyAu15XAAA0DAP?format=png&name=240x240", full=True, partial=True)
+        assert bool(results)
+        assert len(results[0]) > 0
+
+    def test_reverse_image_search_pass(self):
+        # Test that when full and partial are False, function does nothing.
+        results = None
+        results = imagematch.reverse_image_search("https://pbs.twimg.com/media/EwyAu15XAAA0DAP?format=png&name=240x240", full=False, partial=False)
+        assert results == None
+
+    def test_reverse_image_search_partial(self):
+        # Test that only the full match list is empty when
+        # full set to False.
+        full, partial = imagematch.reverse_image_search("https://pbs.twimg.com/media/EwyAu15XAAA0DAP?format=png&name=240x240", full=False, partial=True)
+        assert not bool(full)
+        assert bool(partial)
+
+    def test_reverse_image_search_full(self):
+        # Test that only the partial match list is empty
+        # when partial set to False.
+        full, partial = imagematch.reverse_image_search("https://pbs.twimg.com/media/EwyAu15XAAA0DAP?format=png&name=240x240", full=True, partial=False)
+        assert bool(full)
+        assert not bool(partial)
+        
+    
+    def test_no_image(self):
+        # Test that an exception raises when the link doesn't lead to an image
+        with pytest.raises(Exception):
+            full, partial = imagematch.reverse_image_search("https://twitter.com/LudwigAhgren/status/1368035031218876416", full=True, partial=True)
+        

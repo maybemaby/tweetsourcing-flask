@@ -9,15 +9,14 @@ def reverse_image_search(uri, full=False, partial=False):
 
         response = client.web_detection(image=image)
         annotations = response.web_detection
-        if not annotations.pages_with_matching_images:
+        if full:
+            match_image_urls = annotations.full_matching_images
+        else:
+            match_image_urls = []
+        if partial:
+            partial_match_image_urls = annotations.visually_similar_images
+        else:
+            partial_match_image_urls = []
+        if len(match_image_urls) == 0 and len(partial_match_image_urls) == 0:
             raise Exception('Unable to find matches')
-        match_pages = annotations.pages_with_matching_images
-        match_pages_urls = [page.url for page in match_pages]
-        match_image_urls = []
-        partial_match_image_urls = []
-        for page in match_pages:
-            if full and page.full_matching_images:
-                match_image_urls.append(page.full_matching_images[0])
-            if partial and page.partial_matching_images:
-                partial_match_image_urls.append(page.partial_matching_images[0])
-        return match_pages_urls, match_image_urls, partial_match_image_urls
+        return match_image_urls, partial_match_image_urls
