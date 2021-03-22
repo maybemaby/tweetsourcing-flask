@@ -91,11 +91,11 @@ class TweetHandler(tweepy.API):
             )
         try:
             tweet_images = status_object.entities["media"]
-            image_urls = set()
+            image_urls = []
         except KeyError:
             return None
         except AttributeError:
             return None
         for image in tweet_images:
-            image_urls.add(image["media_url"])
+            image_urls.append(image["media_url"])
         return image_urls

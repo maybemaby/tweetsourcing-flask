@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request, url_for, flash, session
-from tweetsourcing.search import tweethandler, parse, gsearch
+from tweetsourcing.search import parse, gsearch, imagematch
 from tweetsourcing.main.forms import TweetForm, SearchForm
 from tweetsourcing import twitter_api
 
@@ -15,14 +15,13 @@ def home():
         tweet_embed, tweet_status = twitter_api.retrieve_embedded_tweet(
             tweet_url=tweet_url, include_obj=True
         )
-        tweet_images = twitter_api.pull_images(status_object=tweet_status)
+        session["tweet_images"] = twitter_api.pull_images(status_object=tweet_status)
         query, or_terms = parse.query_from_parse(tweet_status.full_text)
         session["query"] = query
         return render_template(
             "home.html",
             title="TweetSourcing",
             tweet_embed=tweet_embed,
-            tweet_images=tweet_images,
             form=form,
             query=query,
             or_terms=or_terms,
@@ -44,9 +43,15 @@ def search():
     form = SearchForm()
     query = form.query.data
     or_terms = form.or_terms.data
+    # reformatting the kwords for list comparison
     kwords = or_terms.split("|")
     kwords += query
     matches = gsearch.search_helper(query, tweet_kwords=kwords, orTerms=or_terms)
+    if session["tweet_images"]:
+        try: 
+            image_match_urls = [imagematch.reverse_image_search(image,full=True, partial=True) for image in session["tweet_images"]]
+        except Exception:
+            image_match_urls = None
     return render_template(
-        "results.html", title="TweetSourcing - Results", matches=matches.values()
+        "results.html", title="TweetSourcing - Results", matches=matches.values(), image_urls = image_match_urls
     )

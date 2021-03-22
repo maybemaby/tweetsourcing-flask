@@ -1,0 +1,28 @@
+    <div id="image_results">
+    {% if image_urls %}
+        {% for url_set in image_urls %}
+        <h2>Image {{ loop.index }} results:</h2>
+        <hr>
+        <div class="image-results-full">
+            <h3>Full Matches:</h3>
+            <ol>
+            {% for url in url_set.full %}
+                <li>Match found: <a href="{{ url }}">link</a></li>
+            {% endfor %}
+            </ol>
+        </div>
+        <div class="image-results-partial">
+            <h3>Partial Matches:</h3>
+            <ol>
+            {% for url in url_set.partial %}
+                <li>Partial Match found: <a href="{{ url }}">link</a></li>
+            {% endfor %}
+            </ol>
+        </div>
+        {% endfor %}
+    {% elif image_urls == None %}
+        <h2>No matches could be found.</h2>
+    {% else %}
+        <h2>No image found in tweet.</h2>
+    {% endif %}
+    </div id="image_results">

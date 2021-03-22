@@ -12,4 +12,7 @@
         {% endif %}
     {% endfor %}
     </ul>
+    {% if image_urls %}
+        {% include "_image_results.html" %}
+    {% endif %}
 {% endblock content %}
