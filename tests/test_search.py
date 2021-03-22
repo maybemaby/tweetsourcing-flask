@@ -82,19 +82,21 @@ class TestParse:
     def test_create_query(self):
         # Test query creating from list of keywords and filtering out words shorter than 3 letters
         keyword_list = ["extracted words", "words", "tweet", "be", "to"]
-        query = parse.create_query(keyword_list)
+        query, or_terms = parse.create_query(keyword_list)
         with pytest.raises(ValueError):
             query.index("be")
         with pytest.raises(ValueError):
             query.index("to")
-        assert query == "extracted words OR words OR tweet"
+        assert query == "extracted words"
+        assert or_terms == "words|tweet"
 
     def test_query_from_parse(self):
         # Test the helper function from parse
-        query = parse.query_from_parse(
+        query, or_terms = parse.query_from_parse(
             "Which words from this tweet will be the extracted words?"
         )
-        assert query == "extracted words OR words OR tweet"
+        assert query == "extracted words"
+        assert or_terms == "words|tweet"
 
 
 class TestGSearch:
@@ -103,7 +105,7 @@ class TestGSearch:
     def test_kword_search(self):
         # Test the success of connecting to google custom search api
         # and returning a results object
-        res = gsearch.kword_search("extracted words OR words OR tweet", 1)
+        res = gsearch.kword_search("extracted words", 1, orTerms="words|tweet")
         assert type(res) is dict
         assert bool(res["items"])
         assert bool(res["queries"]["nextPage"][0]["startIndex"])
