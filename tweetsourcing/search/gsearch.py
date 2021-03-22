@@ -1,6 +1,7 @@
 import os
 from collections import namedtuple
 from newspaper import Article, news_pool
+from newspaper.utils import memoize_articles
 from rake_nltk import Rake
 from googleapiclient.discovery import build
 
@@ -76,11 +77,12 @@ def categorize_news(results_object: dict, tweet_kwords: list, *args):
         article_kword_gen = extract_articles([article.link for article in article_results])
         for result in article_results:
             try:
-                kword_matches = keyword_compare(tweet_kwords, next(article_kword_gen))
+                article_kwords, article_title = next(article_kword_gen) 
+                kword_matches = keyword_compare(tweet_kwords, article_kwords)
             except TypeError:
                 continue
             if kword_matches > news[result.site]["matches"]:
-                news[result.site]["title"] = result.title
+                news[result.site]["title"] = article_title
                 news[result.site]["link"] = result.link
                 news[result.site]["matches"] = kword_matches
     news["next_page"] = next_page
@@ -97,7 +99,7 @@ def extract_articles(url_list):
     -------
     generator with keywords parsed from article url list
     """
-    articles = [Article(url) for url in url_list]
+    articles = [Article(url, memoize_articles=True, fetch_images=False) for url in url_list]
     news_pool.set(articles)
     news_pool.join()
     r = Rake()
@@ -106,7 +108,7 @@ def extract_articles(url_list):
         r.extract_keywords_from_text(article.text)
         article_kwords = r.get_ranked_phrases()
         if article_kwords:
-            yield article_kwords
+            yield article_kwords, article.title
         else:
             yield None
 
@@ -159,4 +161,3 @@ def search_helper(query:str, startnum:int=1,*args, **kwargs) -> dict:
                 break
     news_dict.pop("next_page")
     return news_dict
-    
