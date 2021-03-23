@@ -6,16 +6,12 @@
         <div class="image-results-full">
             <h3>Full Matches:</h3>
             <ol>
-            {% for url in url_set.full %}
-                <li>Match found: <a href="{{ url }}">link</a></li>
-            {% endfor %}
-            </ol>
-        </div>
-        <div class="image-results-partial">
-            <h3>Partial Matches:</h3>
-            <ol>
-            {% for url in url_set.partial %}
-                <li>Partial Match found: <a href="{{ url }}">link</a></li>
+            {% for url in url_set %}
+                <li>
+
+                Match found: <strong>{{ url.title }}</strong><br>
+                <a href="{{ url.url }}">link</a>
+                </li>
             {% endfor %}
             </ol>
         </div>

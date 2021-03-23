@@ -162,33 +162,18 @@ class TestImageMatch:
     def test_reverse_image_search(self):
         # Test for successful image matching against a twitter
         # img link with a generic image.
-        results = imagematch.reverse_image_search("https://pbs.twimg.com/media/EwyAu15XAAA0DAP?format=png&name=240x240", full=True, partial=True)
+        results = imagematch.reverse_image_search("https://pbs.twimg.com/media/ExCW_B4WQAQQlVi?format=jpg&name=large", full=True)
         assert bool(results)
         assert len(results[0]) > 0
 
     def test_reverse_image_search_pass(self):
         # Test that when full and partial are False, function does nothing.
         results = None
-        results = imagematch.reverse_image_search("https://pbs.twimg.com/media/EwyAu15XAAA0DAP?format=png&name=240x240", full=False, partial=False)
+        results = imagematch.reverse_image_search("https://pbs.twimg.com/media/ExCW_B4WQAQQlVi?format=jpg&name=large", full=False)
         assert results == None
 
-    def test_reverse_image_search_partial(self):
-        # Test that only the full match list is empty when
-        # full set to False.
-        full, partial = imagematch.reverse_image_search("https://pbs.twimg.com/media/EwyAu15XAAA0DAP?format=png&name=240x240", full=False, partial=True)
-        assert not bool(full)
-        assert bool(partial)
-
-    def test_reverse_image_search_full(self):
-        # Test that only the partial match list is empty
-        # when partial set to False.
-        full, partial = imagematch.reverse_image_search("https://pbs.twimg.com/media/EwyAu15XAAA0DAP?format=png&name=240x240", full=True, partial=False)
-        assert bool(full)
-        assert not bool(partial)
-        
-    
     def test_no_image(self):
         # Test that an exception raises when the link doesn't lead to an image
         with pytest.raises(Exception):
-            full, partial = imagematch.reverse_image_search("https://twitter.com/LudwigAhgren/status/1368035031218876416", full=True, partial=True)
+            full, partial = imagematch.reverse_image_search("https://twitter.com/LudwigAhgren/status/1368035031218876416", full=True)
         

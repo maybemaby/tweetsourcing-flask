@@ -49,7 +49,7 @@ def search():
     matches = gsearch.search_helper(query, tweet_kwords=kwords, orTerms=or_terms)
     if session["tweet_images"]:
         try: 
-            image_match_urls = [imagematch.reverse_image_search(image,full=True, partial=True) for image in session["tweet_images"]]
+            image_match_urls = [imagematch.reverse_image_search(image,full=True) for image in session["tweet_images"]]
         except Exception:
             image_match_urls = None
     return render_template(
