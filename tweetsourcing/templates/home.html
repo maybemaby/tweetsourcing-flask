@@ -1,30 +1,24 @@
 {% extends "base.html" %}
 
-
-{% block banner %}
-
-
-{% endblock banner %}
-
 {% block content %}
-<body class="d-flex h-100 text-center text-white flex-column" style="background-color: #4284f5; padding: 6em 0 0 0">
+<body class="d-flex h-100 text-center text-white flex-column" style="background-color: #4284f5; padding: 6em 0 0 0;">
         <div class="cover-container d-flex w-100 h-100 p-3 mx-auto flex-column">
             <main class="px-3">
             <h1 class="display-1 fw-bold">TweetSourcing</h1>
             <h2 id="subheader">
             <span>
-            <img class="ms-2 pb-1" src="{{ url_for('static', filename='img') }}/twitter.svg" alt="twitter-icon" width="32" height="32">
-            Read
-            <img class="ms-2 pb-1" src="{{ url_for('static', filename='img') }}/shield-check.svg" alt="shield-check" width="32" height="32">
-            Verify
-            <img class="ms-2 pb-1" src="{{ url_for('static', filename='img') }}/eyeglasses.svg" alt="glasses-icon" width="32" height="32">
-            Evaluate
+                <img class="ms-2 pb-1" src="{{ url_for('static', filename='img') }}/twitter.svg" alt="twitter-icon" width="32" height="32">
+                Read
+                <img class="ms-2 pb-1" src="{{ url_for('static', filename='img') }}/shield-check.svg" alt="shield-check" width="32" height="32">
+                Verify
+                <img class="ms-2 pb-1" src="{{ url_for('static', filename='img') }}/eyeglasses.svg" alt="glasses-icon" width="32" height="32">
+                Evaluate
             </span>
             </h2>
             <form class="form" action="" method="post" id="form" role="form" style="margin-top: 6em;" novalidate>
                 {{ form.hidden_tag() }}
                 <label for="tweet_url"></label>
-                <input class="form-control-lg w-75" type="text" name="tweet_url" id="tweet_url" required="" placeholder="Enter a tweet URL"><br>
+                <input class="form-control-lg w-75" type="text" name="tweet_url" id="tweet_url" placeholder="Enter a tweet URL" required><br>
                 <input class="btn btn-light btn-lg fw-bold mt-3" id="submit" name="submit" type="submit" value="Find Sources">
             </form>
             <br>
@@ -40,7 +34,7 @@
                     <input class="form-control-lg w-50" type="text" name="query" id="query" required="" value="{{ query }}">
                     <h5 class="mt-3">Extra search terms (separated by "|")</h5>
                     <input class="form-control-lg w-75" type="text" name="or_terms" id="or_terms" required="" value="{{ or_terms }}">
-                    <div>Does this query look good? (Edit if needed)</div>
+                    <p>Does this query look good? (Edit if needed)</p>
                     <input class="btn btn-light fw-bold mt-3" name="submit" type="submit" value="Confirm">
                     </form>
                 </div>
