@@ -10,7 +10,7 @@ bp = Blueprint("main", __name__, url_prefix="/")
 def home():
     form = TweetForm()
     confirm_form = SearchForm()
-    if request.method == "POST" and form.submit():
+    if request.method == "POST" and form.validate():
         tweet_url = form.tweet_url.data
         tweet_embed, tweet_status = twitter_api.retrieve_embedded_tweet(
             tweet_url=tweet_url, include_obj=True

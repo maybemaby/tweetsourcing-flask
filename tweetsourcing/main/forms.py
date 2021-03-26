@@ -8,7 +8,7 @@ from wtforms.validators import DataRequired, Length, URL
 class TweetForm(FlaskForm):
     tweet_url = URLField(
         "Enter a tweet URL",
-        validators=[DataRequired(), URL(message="Please enter in a valid URL")],
+        validators=[DataRequired(message="Please fill in a valid URL"), URL(message="Please enter in a valid URL")],
     )
     submit = SubmitField('Find Sources')
 
