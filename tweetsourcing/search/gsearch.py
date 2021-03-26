@@ -21,13 +21,13 @@ def kword_search(query:str, startnum:int, orTerms:list=None):
     service = build("customsearch", "v1", developerKey=os.environ.get("CSE_API_KEY"))
     if orTerms:
         res = (
-            service.cse()
+            service.cse().siterestrict()
             .list(q=query, cx=os.environ.get("CSE_ID"), lr="lang_en", orTerms=orTerms, start=startnum)
             .execute()
     )
     else:
         res = (
-            service.cse()
+            service.cse().siterestrict()
             .list(q=query, cx=os.environ.get("CSE_ID"), lr="lang_en", start=startnum)
             .execute()
         )
