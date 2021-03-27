@@ -10,5 +10,6 @@ class Config(object):
 
 class TestConfig(object):
     SECRET_KEY = 'not-so-secret'
-    DATABASE = os.environ.get("DATABASE_URL") or 'sqlite:///'
+    DATABASE = 'sqlite:///'
     TESTING = True
+    WTF_CSRF_ENABLED = False
