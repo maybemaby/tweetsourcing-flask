@@ -47,7 +47,7 @@ def search():
     kwords = or_terms.split("|")
     kwords += query
     matches = gsearch.search_helper(query, tweet_kwords=kwords, orTerms=or_terms)
-    if session["tweet_images"]:
+    if session["tweet_images"] and form.img_search.data:
         try: 
             image_match_urls = [imagematch.reverse_image_search(image,full=True) for image in session["tweet_images"]]
         except Exception:

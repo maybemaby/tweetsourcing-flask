@@ -27,15 +27,21 @@
                 {{ tweet_embed|safe }}
             {% endif %}
             {% if query %}
-                <div class="d-flex text-center flex-column justify-content-evenly mt-4" id="generated">
+                <div class="mt-4" id="generated">
                     <h5>Your generated keywords:</h5>
-                    <form name="confirm_form" action="{{ url_for('main.search') }}" method="post" id="confirm_form" novalidate>
+                    <form class="d-flex flex-column align-items-center justify-content-evenly mt-4 w-100" name="confirm_form" action="{{ url_for('main.search') }}" method="post" id="confirm_form" novalidate>
                         {{ confirm_form.hidden_tag() }}
-                    <input class="form-control-lg w-50" type="text" name="query" id="query" required="" value="{{ query }}">
-                    <h5 class="mt-3">Extra search terms (separated by "|")</h5>
-                    <input class="form-control-lg w-75" type="text" name="or_terms" id="or_terms" required="" value="{{ or_terms }}">
-                    <p>Does this query look good? (Edit if needed)</p>
-                    <input class="btn btn-light fw-bold mt-3" name="submit" type="submit" value="Confirm">
+                        <input class="form-control-lg w-50" type="text" name="query" id="query" required="" value="{{ query }}">
+                        <h5 class="mt-3">Extra search terms (separated by "|")</h5>
+                        <input class="form-control-lg w-75" type="text" name="or_terms" id="or_terms" required="" value="{{ or_terms }}">
+                        <p>Does this query look good? (Edit if needed)</p>
+                        <div class="d-flex form-check fs-4">
+                            <input class="form-check-input" type="checkbox" name="img_search" value="" id="img_search">
+                            <label class="form-check-label" for="img_search">
+                                Reverse Image search
+                            </label>
+                        </div>
+                        <input class="btn btn-light fw-bold mt-3" name="submit" type="submit" value="Confirm">
                     </form>
                 </div>
             {% endif %}
