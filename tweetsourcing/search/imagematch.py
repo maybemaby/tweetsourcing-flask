@@ -1,4 +1,5 @@
 from collections import namedtuple
+from flask.globals import current_app
 from google.cloud import vision
 
 
@@ -18,6 +19,7 @@ def reverse_image_search(uri:str, full:bool=False) -> tuple:
             match_image_urls = []
             partial_match_image_urls = []
         if len(match_image_urls) == 0:
+            current_app.loggers.warning(f'No matches found for url: {uri}')
             raise Exception('Unable to find matches')
         return match_image_urls
 

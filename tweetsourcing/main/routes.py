@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, url_for, flash, session
+from flask import Blueprint, render_template, request, url_for, flash, session, current_app
 from tweetsourcing.search import parse, gsearch, imagematch
 from tweetsourcing.main.forms import TweetForm, SearchForm
 from tweetsourcing import twitter_api
@@ -11,6 +11,7 @@ def home():
     form = TweetForm()
     confirm_form = SearchForm()
     if request.method == "POST" and form.validate():
+        current_app.logger.info(f'{request.method} to {request.url}')
         tweet_url = form.tweet_url.data
         tweet_embed, tweet_status = twitter_api.retrieve_embedded_tweet(
             tweet_url=tweet_url, include_obj=True

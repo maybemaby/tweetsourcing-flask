@@ -3,6 +3,7 @@ API object. Functions as the main way to interact with tweets and twitter's
 api.
 """
 import os
+from flask.globals import current_app
 import tweepy
 
 
@@ -70,8 +71,8 @@ class TweetHandler(tweepy.API):
                 url=tweet_url, hide_thread="true", align="center", dnt="true"
             )
         except Exception as e:
-            print(
-                f"Error occured, message: {e}; URL attempted to retrieve: {tweet_url}"
+            current_app.logger.error(
+                f"Oembed tweet error, message: {e}; URL attempted to retrieve: {tweet_url}"
             )
         if include_obj:
             return (tweet["html"], self.retrieve_tweet(tweet_url))
