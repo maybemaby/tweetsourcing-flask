@@ -52,6 +52,8 @@ def search():
             image_match_urls = [imagematch.reverse_image_search(image,full=True) for image in session["tweet_images"]]
         except Exception:
             image_match_urls = None
+    else:
+        image_match_urls = None
     return render_template(
         "results.html", title="TweetSourcing - Results", matches=matches.values(), image_urls = image_match_urls
     )
