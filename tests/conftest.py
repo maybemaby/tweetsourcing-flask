@@ -2,18 +2,18 @@ import os
 import pytest
 from tweetsourcing import create_app
 from tweetsourcing.search.tweethandler import TweetHandler
+from config import TestConfig
 
 
 @pytest.fixture
 def app():
-    app = create_app(
-        {
-            "TESTING": True,
-        }
-    )
+    app = create_app(config_class=TestConfig)
+    ctx = app.test_request_context()
+    ctx.push()
 
     yield app
 
+    ctx.pop()
 
 @pytest.fixture
 def client(app):
