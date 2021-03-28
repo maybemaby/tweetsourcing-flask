@@ -41,6 +41,7 @@ def home():
 
 @bp.route("search", methods=["POST"])
 def search():
+    current_app.logger.info(f'{request.method} to {request.url}')
     form = SearchForm()
     query = form.query.data
     or_terms = form.or_terms.data

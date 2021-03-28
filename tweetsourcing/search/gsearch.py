@@ -1,5 +1,6 @@
 import os
 from collections import namedtuple
+from flask import current_app
 from newspaper import Article, news_pool
 from newspaper.utils import memoize_articles
 from rake_nltk import Rake
@@ -146,7 +147,7 @@ def search_helper(query:str, startnum:int=1,*args, **kwargs) -> dict:
     :rtype: dict
     """
     startnum = startnum
-    while int(startnum) <= 50:
+    while int(startnum) <= current_app.config['MAX_RESULTS']:
         if kwargs['orTerms']:
             results = kword_search(query,startnum, orTerms=kwargs['orTerms'])
         else:
