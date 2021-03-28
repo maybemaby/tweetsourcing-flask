@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <body class="d-flex flex-column h-100 w-100 justify-content-center align-items-center p-3" style="background-color: #4284f5;">
+        <img class="img-fluid w-50" src="{{ url_for('static', filename='img') }}/Dog newspaper-01.svg" alt="Error image">
+        <h1 class="fw-bold text-light p-4 text-center">Sorry, could not find any results for those keywords. Maybe the dog ate them.</h1>
+        <h3 class="text-light text-center">Try modifying the keywords manually to fix this.</h1>
+            <a href="{{ url_for('main.home') }}" class="btn btn-light fw-bold text-dark w-50 mt-3" type="button">Go Back</a>
+    </body>
+{% endblock content %}

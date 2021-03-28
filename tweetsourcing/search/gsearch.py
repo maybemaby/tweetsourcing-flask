@@ -50,9 +50,16 @@ def categorize_news(results_object: dict, tweet_kwords: list, *args):
     and link to the article with the most keyword matches.
     """
     # result_items is the items entity in the JSON google search returns
-    result_items = results_object["items"]
+    try:
+        result_items = results_object["items"]
+    except KeyError:
+        current_app.logger.error(
+            f'''No results found for search: {results_object["queries"]["request"][0]["searchTerms"]}'''
+            )
     # getting the next page int from the JSON
-    next_page = results_object["queries"]["nextPage"][0]["startIndex"]
+    next_page = results_object["queries"].get("nextPage",None)
+    if next_page:
+        next_page = next_page[0]["startIndex"]
     if len(args) > 0:
         news = args[0]
     else:

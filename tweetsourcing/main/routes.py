@@ -1,4 +1,5 @@
 from flask import Blueprint, render_template, request, url_for, flash, session, current_app
+from werkzeug.utils import redirect
 from tweetsourcing.search import parse, gsearch, imagematch
 from tweetsourcing.main.forms import TweetForm, SearchForm
 from tweetsourcing import twitter_api
@@ -48,7 +49,10 @@ def search():
     # reformatting the kwords for list comparison
     kwords = or_terms.split("|")
     kwords += query
-    matches = gsearch.search_helper(query, tweet_kwords=kwords, orTerms=or_terms)
+    try:
+        matches = gsearch.search_helper(query, tweet_kwords=kwords, orTerms=or_terms)
+    except UnboundLocalError:
+        return redirect(url_for('errors.no_results')) # Redirecting to an error page for gsearch not returning any results
     if session["tweet_images"] and form.img_search.data:
         try: 
             image_match_urls = [imagematch.reverse_image_search(image,full=True) for image in session["tweet_images"]]
