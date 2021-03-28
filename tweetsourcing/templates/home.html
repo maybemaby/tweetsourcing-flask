@@ -18,7 +18,12 @@
             <form class="form" action="" method="post" id="form" role="form" style="margin-top: 6em;" novalidate>
                 {{ form.hidden_tag() }}
                 <label for="tweet_url"></label>
-                <input class="form-control-lg w-75" type="text" name="tweet_url" id="tweet_url" placeholder="Enter a tweet URL" required><br>
+                    <input class="form-control-lg w-75" type="text" name="tweet_url" id="tweet_url" placeholder="Enter a tweet URL" required><br>
+                    {% for error in form.tweet_url.errors %}
+                    <div class="text-warning fs-5">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
                 <input class="btn btn-light btn-lg fw-bold mt-3" id="submit" name="submit" type="submit" value="Find Sources">
             </form>
             <br>
@@ -32,8 +37,18 @@
                     <form class="d-flex flex-column align-items-center justify-content-evenly mt-4 w-100" name="confirm_form" action="{{ url_for('main.search') }}" method="post" id="confirm_form" novalidate>
                         {{ confirm_form.hidden_tag() }}
                         <input class="form-control-lg w-50" type="text" name="query" id="query" required="" value="{{ query }}">
+                        {% for error in confirm_form.query.errors %}
+                        <div class="text-warning fs-5">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
                         <h5 class="mt-3">Extra search terms (separated by "|")</h5>
                         <input class="form-control-lg w-75" type="text" name="or_terms" id="or_terms" required="" value="{{ or_terms }}">
+                        {% for error in confirm_form.or_terms.errors %}
+                        <div class="text-warning fs-5">
+                            {{ error }}
+                        </div>
+                        {% endfor %}
                         <p>Does this query look good? (Edit if needed)</p>
                         <div class="d-flex form-check fs-4">
                             <input class="form-check-input" type="checkbox" name="img_search" value="" id="img_search">
