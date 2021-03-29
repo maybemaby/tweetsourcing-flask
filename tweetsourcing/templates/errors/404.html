@@ -1,6 +1,12 @@
 {% extends "base.html" %}
 
 {% block content %}
-    <h1>Page not Found</h1>
-    <p><a href="{{ url_for('main.home') }}">Return Home</a></p>
+    <body class="d-flex flex-column h-100 w-100 justify-content-center align-items-center p-3" style="background-color: #4284f5;">
+    <div class="container-sm d-flex justify-content-center">
+        <img class="img-fluid w-50" src="{{ url_for('static', filename='img') }}/Coffee-01.svg" alt="Error image">
+    </div>
+        <h1 class="fw-bold text-light p-4 text-center">Page Not Found</h1>
+        <h3 class="text-light text-center">This page was removed or ran into an error. Sorry we'll work on this!</h1>
+            <a href="{{ url_for('main.home') }}" class="btn btn-light fw-bold text-dark w-50 mt-3" type="button">Go Back</a>
+    </body>
 {% endblock content %}
