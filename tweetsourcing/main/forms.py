@@ -15,5 +15,5 @@ class TweetForm(FlaskForm):
 class SearchForm(FlaskForm):
     query = StringField(validators=[Length(max=141, message="Query too long")])
     or_terms = StringField(validators=[Length(max=141, message="Additional terms too long")])
-    img_search = BooleanField(label="Reverse Image Search", default=False)
+    img_search = BooleanField(label="Reverse Image Search", default=False, id="img_search")
     submit = SubmitField('Confirm')

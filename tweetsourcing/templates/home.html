@@ -24,7 +24,7 @@
                         {{ error }}
                     </div>
                     {% endfor %}
-                <input class="btn btn-light btn-lg fw-bold mt-3" id="submit" name="submit" type="submit" value="Find Sources">
+                <input class="btn btn-light btn-lg fw-bold shadow-lg mt-3" id="submit" name="submit" type="submit" value="Find Sources">
             </form>
             <br>
             {# The embedded tweet doesn't work well with firefox tracking protection #}
@@ -50,8 +50,8 @@
                         </div>
                         {% endfor %}
                         <p>Does this query look good? (Edit if needed)</p>
-                        <div class="d-flex form-check fs-4">
-                            <input class="form-check-input" type="checkbox" name="img_search" value="" id="img_search">
+                        <div class="d-flex fs-4">
+                            <input class="form-check-input" type="checkbox" name="img_search" id="img_search">
                             <label class="form-check-label" for="img_search">
                                 Reverse Image search
                             </label>
