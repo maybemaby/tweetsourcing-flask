@@ -16,6 +16,13 @@ class TestTweetForm:
         form = TweetForm(tweet_url="https://twitter.com/ThePSF/status/1366859617578455041")
         assert form.validate() is True
 
+    def test_only_twitter_urls(self, app):
+        """Test to make sure non twitter status urls don't pass through validation."""
+        form = TweetForm(tweet_url="www.twitter.com")
+        assert form.validate() is False
+        assert "Must be a Tweet Status URL" in form.tweet_url.errors
+        
+
 class TestSearchForm:
     """Testing query submission form."""
 
