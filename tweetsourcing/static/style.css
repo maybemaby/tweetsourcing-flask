@@ -7,3 +7,18 @@ input#img_search.form-check-input:checked[name="img_search"] {
     background-color: #15ca5c;
 }
 
+img.collapse-button:active {
+    animation-duration: 1s;
+    animation-name: flip;
+    transform: scaleY(-1);
+}
+
+@keyframes flip {
+    from {
+        transform: scaleY(1);
+    }
+
+    to {
+        transform: scaleY(-1);
+    }
+}

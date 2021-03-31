@@ -60,6 +60,43 @@
                     </form>
                 </div>
             {% endif %}
+            <div class="fs-5" id="learn-more">
+                How does this work? 
+                <a data-bs-toggle="collapse" href="#learnMore" role="button" aria-expanded="false" aria-controls="learnMore">
+                    <img class="img-fluid" src="{{ url_for('static', filename='img') }}/chevron-down.svg" id="collapse-button" alt="collapse-button">
+                </a>
+            </div>
+            <div class="collapse" id="learnMore">
+                <div class="card card-body text-dark">
+                    <div class="row align-items-start">
+                        <div class="col col-sm-4"><img src="{{ url_for('static', filename='img') }}/seo.svg" alt="search illustration"></div>
+                        <div class="col text-start lh-lg">
+                            <h5 class="fw-bold">Enter a Tweet URL and let the site do the work!</h5>
+                            <ol>
+                                <li>The Tweet text and images gets pulled from Twitter.</li>
+                                <li>We attempt to extract the most important keywords from the text to construct a Google search.</li>
+                                <li>Pull articles from the top results using our custom search engine of <a href="#">news soruces</a>.</li> 
+                                <li>Keywords are extracted from the articles and compared to the tweet's keywords to give you the most relevant results.</li>
+                            </ol>
+                            <p>If there are images in the Tweet, you can select reverse image search to find other places that image may have been used.</p>
+                        </div>
+                    </div>
+                    <hr>
+                    <div class="row align-items-start">
+                        <div class="col text-start">
+                        <h5 class="fw-bold">Helping You Perform Due Diligence</h5>
+                        <p>With how much information gets thrown at you on the internet, it can be easy to take it at face value or accidentally
+                        spread false information. Unfortunately, you can never know if the people you follow verify the facts before tweeting
+                        so it's up to you. This can be a lot of work, but is important to prevent the spread of misinformation and hopefully
+                        this tool can help.
+                        </p>
+                        </div>
+                        <div class="col col-sm-4 lh-base">
+                            <img src="{{ url_for('static', filename='img') }}/artificial intelligence.svg" alt="artificial intelligence.svg">
+                        </div>
+                    </div>
+                </div>
+            </div>
             </main>
         </div>
     <footer class="align-self-start text-dark ms-1" id="footer">
