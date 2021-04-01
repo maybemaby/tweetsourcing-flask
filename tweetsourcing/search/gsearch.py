@@ -111,6 +111,7 @@ def extract_articles(url_list):
     news_pool.set(articles)
     news_pool.join()
     r = Rake()
+    r.stopwords += ["https", "http", "https://", "https ://", "http://", "://"]
     for article in articles:
         article.parse()
         r.extract_keywords_from_text(article.text)

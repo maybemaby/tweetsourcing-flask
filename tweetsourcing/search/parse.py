@@ -14,6 +14,7 @@ def extract_kwords(tweet_text: str) -> list:
     :rtype: [type]
     """
     r = Rake()
+    r.stopwords += ["https", "http", "https://", "https ://" "http://", "://", "www"]
     r.extract_keywords_from_text(tweet_text)
     return r.get_ranked_phrases()
 
