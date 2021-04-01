@@ -40,8 +40,10 @@ def home():
         )
 
 
-@bp.route("search", methods=["POST"])
+@bp.route("search", methods=["GET","POST"])
 def search():
+    if request.method == 'GET' and session['search_result']:
+        return session['search_result']
     current_app.logger.info(f'{request.method} to {request.url}')
     form = SearchForm()
     query = form.query.data
@@ -60,6 +62,7 @@ def search():
             image_match_urls = None
     else:
         image_match_urls = None
+    session['search_result'] = render_template("results.html", title="Tweetsourcing - Results", matches=matches.values(), image_urls=image_match_urls)
     return render_template(
         "results.html", title="TweetSourcing - Results", matches=matches.values(), image_urls = image_match_urls
     )
