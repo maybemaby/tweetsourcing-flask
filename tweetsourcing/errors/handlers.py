@@ -1,5 +1,4 @@
 from flask import render_template, request, current_app
-from tweepy.models import ResultSet
 from tweetsourcing.errors import bp
 
 @bp.app_errorhandler(404)
