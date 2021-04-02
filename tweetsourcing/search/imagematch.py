@@ -1,3 +1,6 @@
+    """imagematch is for taking an image url and passing it to the google vision api
+    to return a list of urls and titles for web pages with matching images.
+    """
 from collections import namedtuple
 from flask.globals import current_app
 from google.cloud import vision
@@ -22,5 +25,3 @@ def reverse_image_search(uri:str, full:bool=False) -> tuple:
             current_app.loggers.warning(f'No matches found for url: {uri}')
             raise Exception('Unable to find matches')
         return match_image_urls
-
-#reverse_image_search("https://pbs.twimg.com/media/ExCW_B4WQAQQlVi?format=jpg&name=large", full=True, partial=True)

@@ -2,7 +2,6 @@
 API object. Functions as the main way to interact with tweets and twitter's
 api.
 """
-import os
 from flask.globals import current_app
 import tweepy
 

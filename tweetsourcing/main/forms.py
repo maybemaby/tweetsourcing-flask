@@ -1,5 +1,4 @@
 import re
-from flask.app import Flask
 from flask_wtf import FlaskForm
 from wtforms.fields.html5 import URLField
 from wtforms.fields import SubmitField, StringField, BooleanField
