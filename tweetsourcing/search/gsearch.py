@@ -1,6 +1,6 @@
-    """gsearch uses the Google custom search API to find news stories relevant to the keywords passed as a query.
-    Also contains the functions for downloading articles and comparing keywords.
-    """
+"""gsearch uses the Google custom search API to find news stories relevant to the keywords passed as a query.
+Also contains the functions for downloading articles and comparing keywords.
+"""
 import os
 from collections import namedtuple
 from flask import current_app

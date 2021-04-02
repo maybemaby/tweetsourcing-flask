@@ -4,15 +4,15 @@ from setuptools import find_packages, setup
 if not os.path.exists('.env'):
     with open(".env", "w", encoding="utf-8") as envfile:
         envfile.write('''SECRET_KEY=not-so-secret
-        FLASK_APP=tweetsourcing
-        FLASK_ENV=development
-        TWITTER_API_KEY=
-        TWITTER_SECRET_KEY=
-        TWITTER_ACCESS_TOKEN=
-        TWITTER_ACCESS_TOKEN_SECRET=
-        CSE_API_KEY=
-        CSE_ID=
-        GOOGLE_APPLICATION_CREDENTIALS=''')
+FLASK_APP=tweetsourcing
+FLASK_ENV=development
+TWITTER_API_KEY=
+TWITTER_SECRET_KEY=
+TWITTER_ACCESS_TOKEN=
+TWITTER_ACCESS_TOKEN_SECRET=
+CSE_API_KEY=
+CSE_ID=
+GOOGLE_APPLICATION_CREDENTIALS=''')
         envfile.close()
 
 

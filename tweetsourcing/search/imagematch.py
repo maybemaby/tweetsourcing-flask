@@ -1,6 +1,6 @@
-    """imagematch is for taking an image url and passing it to the google vision api
-    to return a list of urls and titles for web pages with matching images.
-    """
+"""imagematch is for taking an image url and passing it to the google vision api
+to return a list of urls and titles for web pages with matching images.
+"""
 from collections import namedtuple
 from flask.globals import current_app
 from google.cloud import vision

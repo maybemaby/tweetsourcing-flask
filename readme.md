@@ -4,14 +4,14 @@ Modules used: google-cloud-vision, flask, flask-wtf, google-api-python-client, n
 
 ## Usage
 ```
-$ mkdir tweetsourcing-flask
+$ git clone https://github.com/maybemaby/tweetsourcing-flask.git
 $ python -m venv tweetsourcing-flask\venv
-$ tweetsourcing\venv\Scripts\activate.bat
+$ tweetsourcing-flask\venv\Scripts\activate.bat
 ```
 
 ```
-git clone https://github.com/maybemaby/tweetsourcing-flask.git
-pip install -e
+$ pip install -e .
+$ flask run
 ```
 
 Fill in secure secret key and valid api credentials to the generated .env file.
