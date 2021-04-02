@@ -1,0 +1,5 @@
+include config.py
+graft tweetsourcing/static
+graft tweetsourcing/templates
+global-exclude *.pyc *.env *.json
+global-exclude *.log[.0-9]
