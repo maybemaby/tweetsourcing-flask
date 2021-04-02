@@ -15,6 +15,7 @@ $ flask run
 ```
 
 Fill in secure secret key and valid api credentials to the generated .env file.
+Check [here](https://cloud.google.com/vision/docs/before-you-begin) to figure out how to generate the Cloud Vision API json key file and then add it to the .env also.
 
 # Features
 - RAKE keyword extraction from tweets

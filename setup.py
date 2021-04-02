@@ -33,5 +33,6 @@ setup(
         'newspaper3k',
         'python-dotenv',
         'rake-nltk',
+        'tweepy',
     ],
 )
