@@ -1,1 +1,1 @@
-web: gunicorn tweetsourcing:app
+web: gunicorn 'tweetsourcing:create_app()'

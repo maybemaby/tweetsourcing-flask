@@ -9,7 +9,7 @@ def twitter_url_check(form, field):
     """Custom validator for ensuring URL is twitter link."""
     tweet_regex = re.compile(r"(.+/status/\d+)(\?s=\d+)?", flags=re.IGNORECASE)
     tweet_mo = re.search(tweet_regex, field.data)
-    if type(tweet_mo) is not re.Match:
+    if not tweet_mo:
         raise ValidationError("Must be a Tweet Status URL")
 
 
